@@ -1,0 +1,87 @@
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+<style>
+ul {
+    list-style: none;
+}
+</style>
+
+<div id="polls">
+    <h1> {{ message }} </h1>
+    <ul v-for="poll in polls">
+        <li>
+            <h2>{{ poll.question }}</h2>
+            <ul>
+                <li v-for="option in poll.options">
+                    <input type='radio' :name='poll.question' :id='option.desc' :value='option.desc'
+                        v-model='poll.selected'>
+                    {{ option.desc }}
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <button v-on:click="submit">提交</button>
+</div>
+
+<script>
+var app = new Vue({
+    el: '#polls',
+    methods: {
+        submit: function() {
+            this.polls.forEach(function(poll) {
+                question = poll.question;
+                selected = poll.selected;
+                options = poll.options;
+                options.forEach(function(option) {
+                    if (selected == option.desc) 
+                        option.vote += 1;
+                });
+            });
+            href = './polls-detail.html?' + JSON.stringify(this.polls);
+            window.open(href);
+        },
+    },
+    data: {
+        message: 'Vue使用体验投票',
+        polls: [
+            { 
+                question: 'Vue能减少多少代码量？',
+                selected: null,
+                options: [
+                    {
+                        desc: '如果jquery写，起码减少一半',
+                        vote: 0
+                    },
+                    {
+                        desc: '差不多的，只是看起来Vue这种写法很酷',
+                        vote: 0
+                    },
+                    {
+                        desc: '我想发脾气，官方文档上写的教程都是错的，你烦不烦，你发牢骚，人家说，no can no bb, show me your code. 我只想说 fuck you',
+                        vote: 0
+                    }
+                ]
+            },
+            { 
+                question: 'Vue到底有啥优势？',
+                selected: null,
+                options: [
+                    {
+                        desc: '官方文档上也没有将这个说的很清楚',
+                        vote: 0
+                    },
+                    {
+                        desc: '我觉得是传销，好像一堆前端程序员参加会议为了找工作一样',
+                        vote: 0
+                    },
+                    {
+                        desc: '只是一种新的写法，Vue试图取代Jquery吧',
+                        vote: 0
+                    }
+                ]
+            },
+        ]
+    }
+})
+</script>
